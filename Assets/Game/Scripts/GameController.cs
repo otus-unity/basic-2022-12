@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Linq;
 using Game.Scripts.Characters;
@@ -36,6 +37,9 @@ public class GameController : MonoBehaviour
 
     private Queue _turns = new Queue();
 
+    private Character _selectedTarget;
+    private bool _isTargetSelectionConfirmed;
+
 
     private void Start()
     {
@@ -52,6 +56,19 @@ public class GameController : MonoBehaviour
         StartCoroutine(LevelLoop());
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            SelectRandomTarget(_enemyCharacters);
+        }
+
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            _isTargetSelectionConfirmed = true;
+        }
+    }
+
     private IEnumerator LevelLoop()
     {
         foreach (var turn in GetTurns())
@@ -60,8 +77,22 @@ public class GameController : MonoBehaviour
             {
                 if (character.IsAlive)
                 {
-                    var opponent = (IsPlayerCharacter(character)) ? GetTarget(_enemyCharacters) : GetTarget(_playerCharacters);
-                    yield return character.Attack(opponent);
+                    _isTargetSelectionConfirmed = false;
+
+                    if (IsPlayerCharacter(character))
+                    {
+                        Debug.Log("GameController.LevelLoop: SELECT TARGET");
+
+                        SelectRandomTarget(_enemyCharacters);
+                    }
+                    else
+                    {
+                        AutoSelectTarget(_playerCharacters);
+                    }
+
+                    yield return new WaitUntil(() => _isTargetSelectionConfirmed);
+
+                    yield return character.Attack(_selectedTarget);
 
                     yield return new WaitForSeconds(1f);
 
@@ -123,9 +154,22 @@ public class GameController : MonoBehaviour
         return true;
     }
 
-    private Character GetTarget(Character[] characters)
+    private void SelectRandomTarget(Character[] characters)
     {
-        return characters.First(character => character.IsAlive);
+        var aliveCharacters = characters.Where(character => character.IsAlive).ToArray();
+        var random = new System.Random();
+        var randomCharactersIndex = random.Next(aliveCharacters.Length);
+
+        Debug.Log($"GameController.SelectTarget: randomEnemyIndex = {randomCharactersIndex}");
+
+        _selectedTarget = aliveCharacters[randomCharactersIndex];
+    }
+
+    private void AutoSelectTarget(Character[] characters)
+    {
+        _selectedTarget = characters.First(character => character.IsAlive);
+
+        _isTargetSelectionConfirmed = true;
     }
 
     public void CallSniper()
