@@ -46,6 +46,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _animator: {fileID: 1490630785363937436}
+  _weapon:
+    _weaponType: 2
+    _damage: 1
   Health: 10
 --- !u!1001 &8315956546315962026
 PrefabInstance:

@@ -8,6 +8,9 @@ namespace Game.Scripts.Characters
         [SerializeField]
         private Animator _animator;
 
+        [SerializeField]
+        public Weapon _weapon;
+
         public int Health;
 
         public bool IsAlive => Health > 0;
@@ -36,7 +39,7 @@ namespace Game.Scripts.Characters
                 _animator.SetBool("IsHitting", false);
             }
 
-            attackedCharacter.Health -= 1;
+            attackedCharacter.Health -= _weapon.Damage;
 
             if (attackedCharacter.Health <= 0)
             {
