@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Linq;
 using Game.Scripts.Characters;
 using UnityEngine;
 
@@ -24,8 +25,11 @@ using UnityEngine;
 // Show game over (success or fail)
 public class GameController : MonoBehaviour
 {
-    public Character Player;
-    public Character Enemy;
+    [SerializeField]
+    private Character[] _playerCharacters;
+
+    [SerializeField]
+    private Character[] _enemyCharacters;
 
     private void Start()
     {
@@ -36,24 +40,70 @@ public class GameController : MonoBehaviour
     {
         while (true)
         {
-            if (Player.Health > 0 && Enemy.Health > 0)
+            foreach (var player in _playerCharacters)
             {
-                yield return Player.Attack(Enemy);
+                if (AreCharactersAlive(_playerCharacters) && AreCharactersAlive(_enemyCharacters))
+                {
+                    var enemyTarget = GetTarget(_enemyCharacters);
+                    yield return player.Attack(enemyTarget);
+                }
+
+                yield return new WaitForSeconds(1f);
             }
 
-            yield return new WaitForSeconds(1f);
-
-            if (Player.Health > 0 && Enemy.Health > 0)
+            foreach (var enemy in _enemyCharacters)
             {
-                yield return Enemy.Attack(Player);
+                if (AreCharactersAlive(_playerCharacters) && AreCharactersAlive(_enemyCharacters))
+                {
+                    var playerTarget = GetTarget(_playerCharacters);
+                    yield return enemy.Attack(playerTarget);
+                }
+
+                yield return new WaitForSeconds(1f);
             }
 
-            yield return new WaitForSeconds(1f);
-
-            if (Player.Health <= 0 || Enemy.Health <= 0)
+            if (AreAllCharactersDead(_playerCharacters) || AreAllCharactersDead(_enemyCharacters))
             {
                 yield break;
             }
         }
+    }
+
+    private bool AreCharactersAlive(Character[] characters, int minAlive = 1)
+    {
+        int countAlive = 0;
+        foreach (var character in characters)
+        {
+            if (character.IsAlive)
+            {
+                countAlive += 1;
+                if (countAlive >= minAlive)
+                    return true;
+            }
+        }
+
+        return false;
+
+        // LINQ
+        // var numAlive = characters.Count(character => character.IsAlive);
+        // return numAlive >= minAlive;
+    }
+
+    private bool AreAllCharactersDead(Character[] characters)
+    {
+        foreach (var character in characters)
+        {
+            if (character.IsAlive)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private Character GetTarget(Character[] characters)
+    {
+        return characters.First(character => character.IsAlive);
     }
 }

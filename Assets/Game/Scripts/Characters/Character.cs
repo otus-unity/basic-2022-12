@@ -10,6 +10,9 @@ namespace Game.Scripts.Characters
 
         public int Health;
 
+        public bool IsAlive => Health > 0;
+
+
         public IEnumerator Attack(Character attackedCharacter)
         {
             if (Health > 8)
