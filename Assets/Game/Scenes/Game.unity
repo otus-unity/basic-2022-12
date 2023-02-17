@@ -520,10 +520,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 624950764}
     m_Modifications:
-    - target: {fileID: 1490630785363937436, guid: 3721399d4363f1ee8a87dcf026a5f6ae, type: 3}
-      propertyPath: m_ApplyRootMotion
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 8315956546764020291, guid: 3721399d4363f1ee8a87dcf026a5f6ae, type: 3}
       propertyPath: m_Name
       value: Hooligan_02

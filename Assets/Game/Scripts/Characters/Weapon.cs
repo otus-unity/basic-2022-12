@@ -12,6 +12,7 @@ namespace Game.Scripts.Characters
         [SerializeField]
         private int _damage;
 
+        public WeaponType Type => _weaponType;
         public int Damage => _damage;
     }
 }

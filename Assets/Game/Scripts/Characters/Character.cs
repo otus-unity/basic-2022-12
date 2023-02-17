@@ -1,4 +1,5 @@
 using System.Collections;
+using Game.Scripts.Helpers;
 using UnityEngine;
 
 namespace Game.Scripts.Characters
@@ -18,14 +19,8 @@ namespace Game.Scripts.Characters
 
         public IEnumerator Attack(Character attackedCharacter)
         {
-            if (Health > 8)
-            {
-                _animator.SetTrigger("IsShooting");
-            }
-            else
-            {
-                _animator.SetBool("IsHitting", true);
-            }
+            var weaponAnimationName = WeaponHelpers.GetAnimationNameFor(_weapon.Type);
+            _animator.SetTrigger(weaponAnimationName);
 
             yield return null;
 
@@ -33,11 +28,6 @@ namespace Game.Scripts.Characters
             var duration = animatorStateInfo.length;
 
             yield return new WaitForSeconds(duration);
-
-            if (Health <= 8)
-            {
-                _animator.SetBool("IsHitting", false);
-            }
 
             attackedCharacter.Health -= _weapon.Damage;
 
