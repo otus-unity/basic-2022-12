@@ -18,6 +18,21 @@ namespace Game.Scripts.Characters
         public bool IsAlive => _health.IsAlive;
 
 
+        private void Start()
+        {
+            _health.OnDeath += OnDeath;
+        }
+
+        private void OnDestroy()
+        {
+            _health.OnDeath -= OnDeath;
+        }
+
+        private void OnDeath()
+        {
+            Debug.Log("Character.OnDeath: ");
+        }
+
         public IEnumerator Attack(Character attackedCharacter)
         {
             var weaponAnimationName = WeaponHelpers.GetAnimationNameFor(_weapon.Type);

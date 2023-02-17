@@ -6,6 +6,8 @@ namespace Game.Scripts.Characters
     [Serializable]
     public class Health
     {
+        public Action OnDeath;
+
         [SerializeField]
         private int _maximumHealth;
 
@@ -36,6 +38,7 @@ namespace Game.Scripts.Characters
         private void Die()
         {
             Debug.Log("Health.Die: ");
+            OnDeath?.Invoke();
         }
     }
 }
