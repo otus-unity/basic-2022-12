@@ -13,7 +13,7 @@ namespace Game.Scripts.Characters
         public Weapon _weapon;
 
         [SerializeField]
-        public Health _health;
+        private Health _health;
 
         public bool IsAlive => _health.IsAlive;
 
@@ -45,7 +45,12 @@ namespace Game.Scripts.Characters
 
             yield return new WaitForSeconds(duration);
 
-            attackedCharacter._health.TakeDamage(_weapon.Damage);
+            attackedCharacter.TakeDamage(_weapon.Damage);
+        }
+
+        public void TakeDamage(int damage)
+        {
+            _health.TakeDamage(damage);
         }
     }
 }

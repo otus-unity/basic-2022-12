@@ -31,6 +31,9 @@ public class GameController : MonoBehaviour
     [SerializeField]
     private Character[] _enemyCharacters;
 
+
+    private Weapon _sniperRifle = new Weapon(WeaponType.SniperRifle, 5);
+
     private void Start()
     {
         StartCoroutine(LevelLoop());
@@ -105,5 +108,14 @@ public class GameController : MonoBehaviour
     private Character GetTarget(Character[] characters)
     {
         return characters.First(character => character.IsAlive);
+    }
+
+    public void CallSniper()
+    {
+        var enemy = _enemyCharacters.FirstOrDefault(character => character.IsAlive);
+        if (enemy != null && enemy.IsAlive)
+        {
+            enemy.TakeDamage(_sniperRifle.Damage);
+        }
     }
 }
