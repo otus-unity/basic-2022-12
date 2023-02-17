@@ -39,6 +39,8 @@ namespace Game.Scripts.Characters
         private void OnDeath()
         {
             Debug.Log("Character.OnDeath: ");
+
+            _animator.SetTrigger("IsDead");
         }
 
         public IEnumerator Attack(Character attackedCharacter)
