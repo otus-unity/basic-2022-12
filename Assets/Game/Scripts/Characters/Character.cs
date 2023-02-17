@@ -12,9 +12,10 @@ namespace Game.Scripts.Characters
         [SerializeField]
         public Weapon _weapon;
 
-        public int Health;
+        [SerializeField]
+        public Health _health;
 
-        public bool IsAlive => Health > 0;
+        public bool IsAlive => _health.IsAlive;
 
 
         public IEnumerator Attack(Character attackedCharacter)
@@ -29,17 +30,7 @@ namespace Game.Scripts.Characters
 
             yield return new WaitForSeconds(duration);
 
-            attackedCharacter.Health -= _weapon.Damage;
-
-            if (attackedCharacter.Health <= 0)
-            {
-                attackedCharacter.Die();
-            }
-        }
-
-        private void Die()
-        {
-            Debug.Log($"{GetType().Name}.Die: {gameObject.name}");
+            attackedCharacter._health.TakeDamage(_weapon.Damage);
         }
     }
 }

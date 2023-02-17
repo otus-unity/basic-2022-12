@@ -49,7 +49,9 @@ MonoBehaviour:
   _weapon:
     _weaponType: 1
     _damage: 3
-  Health: 10
+  _health:
+    _maximumHealth: 10
+    _currentHealth: 10
 --- !u!1001 &3967033777251983654
 PrefabInstance:
   m_ObjectHideFlags: 0
